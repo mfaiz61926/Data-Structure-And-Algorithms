@@ -2,6 +2,39 @@ class Solution {
 public:
     string s;
     int n;
+    long long dp[17][15*9 + 100][2];
+    long long solve(int pos, int sum, int ok){
+        if(pos >= n) return sum == 0 && pos > 0;
+
+        if(dp[pos][sum + 9*15][ok] != -1) return dp[pos][sum + 9*15][ok];
+        long long res = 0;
+        int limit = ok ? s[pos] - '0' : 9;
+
+        for(int i = 0; i <= limit; i++){
+            if((pos + 1) % 2) res += solve(pos + 1, sum + i, ok & (limit == i));
+            else res += solve(pos + 1, sum - i, ok & (limit == i));
+        }
+
+        return dp[pos][sum + 9*15][ok] = res;
+    }
+    long long countBalanced(long long low, long long high) {
+        memset(dp, -1, sizeof(dp));
+        s = to_string(high); n = s.size();
+        long long a1 = solve(0,0,1);
+
+        s = to_string(low - 1); n = s.size();
+        memset(dp, -1, sizeof(dp));
+        long long a2 = solve(0,0,1);
+
+        return a1 - a2;
+    }
+};
+
+//TABULATION
+class Solution {
+public:
+    string s;
+    int n;
 
     // sum range = [-135, +135] → size = 271
     long long dp[17][275][2];
