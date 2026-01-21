@@ -1,3 +1,47 @@
+//this is my code
+class Solution {
+public:
+    int maxSideLength(vector<vector<int>>& mat, int t) {
+        int n = mat.size();
+        int m = mat[0].size();
+        int mx = INT_MIN;
+        vector<vector<int>>dp(n, vector<int>(m, 0));
+
+        dp[0][0] = mat[0][0];
+
+        for(int i = 1; i < m; i++){
+            dp[0][i] += (mat[0][i] + dp[0][i-1]);
+        }
+        
+        for(int i = 1; i < n; i++){
+            dp[i][0] += (mat[i][0] + dp[i - 1][0]);
+        }
+
+        for(int i = 1; i < n; i++){
+            for(int j = 1; j < m; j++){
+                dp[i][j] += (mat[i][j] + dp[i][j-1] + dp[i - 1][j] - dp[i - 1][j - 1]);
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                for(int f = 0; f < min(n - i, m - j); f++){
+                    int lr = i + f;
+                    int lc = j + f;
+                    int sum = dp[lr][lc];
+                    if(i > 0) sum -= dp[i - 1][lc];
+                    if(j > 0) sum -= dp[lr][j - 1];
+                    if(i > 0 && j > 0) sum += dp[i - 1][j - 1];
+                    if(sum <= t){
+                        mx = max(mx, f+1);
+                    }
+                    else break;
+                }
+            }
+        }
+        return mx == INT_MIN ? 0 : mx;
+    }
+};
+
 /*     Scroll below to see JAVA code also    */
 /*
     MY YOUTUBE VIDEO ON THIS Qn    : https://www.youtube.com/watch?v=olDXKOSydpg
