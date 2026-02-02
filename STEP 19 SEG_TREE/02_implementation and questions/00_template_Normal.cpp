@@ -1,32 +1,102 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-           
-struct seg_tree {
-    vector<int> seg;
-    int n;
-    
-    seg_tree (int _n) : n(_n) {
-        seg.resize(4*n);
-    }
-    
-    void update (int pos, int val, int l = 0, int r = -1, int i = 0) {
-        if (r == -1) r += n;
-        if (l == r) {
-            seg[i] = val;
-            return;
-        }
-        int m = (l+r) >> 1;
-        if (m >= pos) update (pos, val, l, m, i*2+1);
-        else update (pos, val, m+1, r, i*2+2);
-        seg[i] = max (seg[i*2+1], seg[i*2+2]);
-    }
-    
-    int query (int x, int y, int l = 0, int r = -1, int i = 0) {
-        if (r == -1) r += n;
-        if (r < x || l > y) return 0;
-        if (l >= x && r <= y) return seg[i];
-        int m = (l+r) >> 1;
-        return max (query(x, y, l, m, i*2+1), query (x, y, m+1, r, i*2+2));
-    }
+struct SegTree {
+	int n;
+	vector<int> st;
+
+	void init(int _n) {
+		this->n = _n; // n = _n also correct
+		st.resize(4 * n, 0);
+	}
+
+	void build(int start, int end, int node, vector<int> &v) {
+		// leaf node base case
+		if (start == end) {
+			st[node] = v[start];
+			return;
+		}
+
+		int mid = (start + end) / 2;
+
+		// left subtree is (start,mid)
+		build(start, mid, 2 * node + 1, v);
+
+		// right subtree is (mid+1,ending)
+		build(mid + 1, end, 2 * node + 2, v);
+
+		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
+	}
+
+	int query(int start, int end, int l, int r, int node) {
+		// non overlapping case  [l r] [start end] OR [start end] [l r]
+		if (start > r || end < l) {
+			return 0;
+		}
+
+		// complete overlap  [l start end r]
+		if (l <= start && end <= r) {
+			return st[node];
+		}
+
+		// partial case
+		int mid = (start + end) / 2;
+
+		int q1 = query(start, mid, l, r, 2 * node + 1);
+		int q2 = query(mid + 1, end, l, r, 2 * node + 2);
+
+		return q1 + q2;
+	}
+
+	void update(int start, int end, int node, int index, int value) {
+		// base case
+		if (start == end) {
+			st[node] = value;
+			return;
+		}
+
+		int mid = (start + end) / 2;
+		if (index <= mid) {
+			// left subtree
+			update(start, mid, 2 * node + 1, index, value);
+		}
+		else {
+			// right
+			update(mid + 1, end, 2 * node + 2, index, value);
+		}
+
+		st[node] = st[node * 2 + 1] + st[node * 2 + 2];
+
+		return;
+	}
+
+	void build(vector<int> &v) {
+		build(0, n - 1, 0, v);
+	}
+
+	int query(int l, int r) {
+		return query(0, n - 1, l, r, 0);
+	}
+
+	void update(int idx, int val) {
+		update(0, n - 1, 0, idx, val);
+	}
 };
 
+int main()
+{
+	vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8};
+	// cout << v.size();
+
+	SegTree tree;
+
+	tree.init(v.size());
+
+	tree.build(v);
+
+	cout << tree.query(0, 4) << '\n';
+
+	tree.update(4, 10);
+    cout << tree.query(0, 4) << '\n';
+
+	return 0;
+}
