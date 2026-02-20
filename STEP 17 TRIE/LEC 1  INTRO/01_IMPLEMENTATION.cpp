@@ -8,7 +8,7 @@ struct Node {
     //Flag indicating if the node marks the end of a word
     bool flag=false;
 
-    //check if the node contains a specific key (letter)
+    //check if the node contains a specific key (letter) ....
     bool containsKey(char ch){
         return links[ch-'a']!=NULL;
     }
