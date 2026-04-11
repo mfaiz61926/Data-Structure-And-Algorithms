@@ -73,7 +73,7 @@ void __f (const char* names, Arg1&& arg1, Args&&... args)
     cout.write (names, comma - names) << " : " << arg1 << " | "; __f (comma + 1, args...);
 }
 
-const int N = 200005;
+const int N = 200005; //this is constant
 
 void solve() {
     int n;cin>>n;
