@@ -89,7 +89,7 @@ struct fenwick{
             x += (x & (-x));
         }
     }
-
+    // inversion count
     int sum (int x){
         x++;
         int ans = 0;
