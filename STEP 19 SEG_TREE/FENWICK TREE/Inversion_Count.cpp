@@ -90,7 +90,7 @@ struct fenwick{
         }
     }
     // inversion count
-    // using fenwick tree
+    // using fenwick tree //
     int sum (int x){
         x++;
         int ans = 0;
