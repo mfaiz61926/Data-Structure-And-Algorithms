@@ -188,7 +188,7 @@ void m_conq() {
         memset(dp, -1, sizeof(dp));
         int ansR = solve(right, 0, 1, 0, 0);
 
-        string left = to_string(l - 1); 
+        string left = to_string(l - 1); // if you want you can check if(l - 1 < 0) then for l return 0;
         memset(dp, -1, sizeof(dp));
         int ansL = solve(left, 0, 1, 0, 0);
 
