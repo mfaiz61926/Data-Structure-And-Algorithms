@@ -150,7 +150,7 @@ int up[MXN][MX_BITS];
 
 void m_conq() {
         int n, q;
-        cin >> n >> q;
+        cin >> n >> q;  //
         
         up[1][0] = 0;
         for(int i = 2; i <= n; i++){
