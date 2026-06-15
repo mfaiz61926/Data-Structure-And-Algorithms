@@ -144,8 +144,73 @@ const int d4r[4]={-1, 0, 1, 0}, d4c[4]={0, 1, 0, -1};
 const int d8r[8]={-1, -1, 0, 1, 1, 1, 0, -1}, d8c[8]={0, 1, 1, 1, 0, -1, -1, -1};
 const int N = 200005;
 
+const int MXN = 200005;
+const int MX_Bit = 18;
+
+int up[MXN][MX_Bit];
+int depth[MXN];
+vector<int>adj[MXN];
+
+void dfs(int u, int p){
+    up[u][0] = p;
+
+    for(int i = 1; i < MX_Bit; i++){
+        up[u][i] = up[up[u][i - 1]][i - 1];
+    }
+
+    for(int v : adj[u]){
+        if(v != p){
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
+        }
+    }
+}
+
+int get_lca(int u, int v){
+    if(depth[u] < depth[v]){
+        swap(u, v);
+    }
+
+    int diff = depth[u] - depth[v];
+    for(int i = 0; i < MX_Bit; i++){
+        if((diff >> i) & 1){
+            u = up[u][i];
+        }
+    }
+
+    if(u == v) return u;
+
+    for(int i = MX_Bit - 1; i >= 0; i--){
+        if(up[u][i] != up[v][i]){
+            u = up[u][i];
+            v = up[v][i];
+        }
+    }
+
+    return up[u][0];
+}
+
 void m_conq() {
-        
+        int n, q;
+        cin >> n >> q;
+
+        for(int i = 0; i < n - 1; i++){
+            int u, v;
+            cin >> u >> v;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        dfs(1, 0);
+
+        while(q--){
+            int a, b;
+            cin >> a >> b;
+            
+            int lca = get_lca(a, b);
+            int dis = depth[a] + depth[b] - 2 * (depth[lca]);
+            cout << dis << '\n';
+        }
 }
 
 int32_t main()
@@ -160,7 +225,7 @@ int32_t main()
     // clock_t z = clock();
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     fr1(i, t){
         // cout << "Case #" <<  i+1 << ": ";
         m_conq();
