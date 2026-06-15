@@ -1,11 +1,12 @@
-/*
-Structre of the node of the tree is as
+#include <bits/stdc++.h>
+using namespace std;
+//Structre of the node of the tree is as
 struct Node
 {
     int data;
     Node* left, *right;
 };
-*/
+
 class Solution {
 public:
     Node* deleteNode(Node* root, int key) {
