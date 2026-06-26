@@ -185,16 +185,26 @@ void dfs(int u){
     }
 }
 
+// int dfs1(int u){ // this is best
+//     int &ret = dp[u];
+//     if(vis[u]){
+//         return ret;
+//     }
+//     vis[u] = 1;
+//     for(auto it : dag[u]){
+//         ret = max(ret, compFun[u] + dfs1(it));
+//     }
+//     return ret;
+// }
+
+
 int dfs1(int u){
-    int &ret = dp[u];
-    if(vis[u]){
-        return ret;
-    }
+    if(vis[u]) return dp[u];
     vis[u] = 1;
-    for(auto it : dag[u]){
-        ret = max(ret, compFun[u] + dfs1(it));
+    for(auto &v : dag[u]){
+        dp[u] = max(dp[u], compFun[u] + dfs1(v));
     }
-    return ret;
+    return dp[u];
 }
 
 void m_conq() {
