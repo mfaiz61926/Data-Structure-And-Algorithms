@@ -44,7 +44,7 @@ using namespace std;
 #define permu(p, a)    iota(all(p), a)
 
 
-int MOD=1e9+7; 
+int MOD=998244353; 
 void mod_add(int &a , int b) {a=((a%MOD)+(b%MOD))%MOD;}
 void mo_dsub(int &a , int b) {a=((a%MOD)-(b%MOD)+MOD)%MOD;}
 void mo_dmul(int &a , int b) {a=((a%MOD)*(b%MOD))%MOD;}
@@ -63,11 +63,11 @@ inline int power(int a, int b)
     int x = 1;
     while (b)
     {
-        if (b & 1) x *= a;
-        a *= a;
+        if (b & 1) x = (x * a) % MOD;
+        a = (a * a) % MOD;
         b >>= 1;
     }
-    return x;
+    return x % MOD;
 }
 
 template <typename Arg1>
@@ -144,92 +144,12 @@ const int d4r[4]={-1, 0, 1, 0}, d4c[4]={0, 1, 0, -1};
 const int d8r[8]={-1, -1, 0, 1, 1, 1, 0, -1}, d8c[8]={0, 1, 1, 1, 0, -1, -1, -1};
 const int N = 200005;
 
-vector<int>adj[N];
-vector<vector<int>>scc;
-int tin[N], low[N], root[N], big[N], dp[N];
-stack<int>st;
-bool inStack[N];
-int timer;
-int scc_cnt;
-
-void dfs(int u){
-    tin[u] = low[u] = ++timer;
-    st.push(u);
-    inStack[u] = true;
-
-    for(int v : adj[u]){
-        if(!tin[v]){
-            dfs(v);
-            low[u] = min(low[u], low[v]);
-        }
-        else if(inStack[v]){
-            low[u] = min(low[u], tin[v]);
-        }
-    }
-
-    if(low[u] == tin[u]){
-        int v = -1;
-        scc.push_back({});
-        while(v != u){
-            v = st.top();
-            st.pop();
-            inStack[v] = false;
-            root[v] = u;
-            big[u] += 1;
-            scc.back().push_back(v);
-        }
-    }
-}
-
-// int dfs2(int u){
-//     int &res = dp[u];
-//     if(big[u] > 1) res = 1;
-//     if(~res) return res;
-
-//     res = 0;
-//     for(auto v : adj[u]) if(dfs2(v)) res = 1;
-//     return res;
-// }
-int dfs1(int u){ // The function returns: 1 if this SCC contains or can reach a cycle. 0 otherwise.
-    if(big[u] > 1) dp[u] = 1;   //If an SCC has more than one vertex, then it must contain a cycle.
-    if(dp[u] != -1) return dp[u];
-
-    int res = 0;
-    for(auto v : adj[u]) if(dfs1(v)) res = 1;  //Can you reach a cycle?
-    return dp[u] = res;
-}
-
 void m_conq() {
-        int n, m;
-        cin >> n >> m;
+        int n, m, r, c;
+        cin >> n >> m >> r >> c;
 
-        vector<pair<int,int>>edge;
-        for(int i = 0 ; i < m; i++){
-            int u, v;
-            cin >> u >> v;
-            adj[u].push_back(v);
-            edge.push_back({u, v});
-        }
-
-        for(int u = 1; u <= n; u++){
-            if(!tin[u]) dfs(u);
-        }
-
-        for(int i = 1; i <= n; i++) adj[i].clear();
-
-        for(auto &i : edge){
-            int u = i.first, v = i.second;
-            if(root[u] != root[v]) adj[root[u]].push_back(root[v]);
-        }
-
-        memset(dp, -1, sizeof(dp));
-        for(int i = 1; i <= n; i++){
-            if(root[i] == i && dp[i] == -1) dfs1(i);
-        }
-
-        int ans = 0;
-        for(int i = 1; i <= n; i++) ans += big[i] * dp[i];
-        cout << ans << endl;
+        int freeVal = n * m - (n - r + 1) * (m - c + 1);
+        cout << power(2, freeVal) << endl;
 }
 
 int32_t main()
@@ -244,7 +164,7 @@ int32_t main()
     // clock_t z = clock();
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     fr1(i, t){
         // cout << "Case #" <<  i+1 << ": ";
         m_conq();
