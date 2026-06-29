@@ -1,3 +1,172 @@
+// #include <bits/stdc++.h>  // alternative easy understandable solution of tarjan
+// using namespace std;
+
+// const int N = 100005;
+
+// vector<int> adj[N], rev[N];
+// vector<vector<int>> comp;
+
+// int tin[N], low[N];
+// bool inStack[N], vis[N];
+// stack<int> st;
+
+// int timer = 0, scc = 0;
+// int id[N], sz[N];
+
+// void dfs(int u) {
+//     tin[u] = low[u] = ++timer;
+//     st.push(u);
+//     inStack[u] = true;
+
+//     for (int v : adj[u]) {
+//         if (!tin[v]) {
+//             dfs(v);
+//             low[u] = min(low[u], low[v]);
+//         }
+//         else if (inStack[v]) {
+//             low[u] = min(low[u], tin[v]);
+//         }
+//     }
+
+//     if (low[u] == tin[u]) {
+//         scc++;
+//         comp.push_back({});
+//         int v = -1;
+
+//         while (v != u) {
+//             v = st.top();
+//             st.pop();
+//             inStack[v] = false;
+//             comp.back().push_back(v);
+//         }
+//     }
+// }
+
+// int dfs2(int u) {
+//     vis[u] = true;
+
+//     int ok = (sz[id[u]] == 1);
+
+//     for (int v : adj[u])
+//         if (!vis[v])
+//             ok &= dfs2(v);
+
+//     for (int v : rev[u])
+//         if (!vis[v])
+//             ok &= dfs2(v);
+
+//     return ok;
+// }
+
+// int main() {
+//     ios::sync_with_stdio(false);
+//     cin.tie(nullptr);
+
+//     int n, m;
+//     cin >> n >> m;
+
+//     while (m--) {
+//         int u, v;
+//         cin >> u >> v;
+//         adj[u].push_back(v);
+//         rev[v].push_back(u);
+//     }
+
+//     for (int i = 1; i <= n; i++)
+//         if (!tin[i])
+//             dfs(i);
+
+//     // assign SCC ids
+//     for (int i = 0; i < scc; i++) {
+//         sz[i] = comp[i].size();
+//         for (int v : comp[i])
+//             id[v] = i;
+//     }
+
+//     memset(vis, 0, sizeof(vis));
+
+//     int ans = n;
+
+//     for (int i = 1; i <= n; i++)
+//         if (!vis[i])
+//             ans -= dfs2(i);
+
+//     cout << ans << '\n';
+// }
+
+
+
+
+
+
+//kosaraju
+// #include "bits/stdc++.h"
+// using namespace std;
+
+// const int N = 1e5 + 5;
+// vector<int>g[N],gr[N];
+// int vis[N];
+// int big[N];
+// int c[N];
+// vector<int>v;
+// int n,m;
+
+// void add(int a,int b){
+//     g[a].pb(b);
+//     gr[b].pb(a);
+// }
+
+// void dfs0(int nd){
+//     vis[nd] = 1;
+//     for(auto it:g[nd]) if(!vis[it]) dfs0(it);
+//     v.pb(nd);
+// }
+
+// void dfsr(int nd,int id){
+//     vis[nd] = 1;
+//     c[nd] = id;
+//     big[id] += 1;
+//     for(auto it:gr[nd]) if(!vis[it]) dfsr(it,id);
+// }
+
+// void scc(){
+//     for(int i = 1;i<=n;++i) if(!vis[i]) dfs0(i);
+//     fill(vis + 1,vis + 1 + n,0);
+//     reverse(all(v));
+//     int ID = 1;
+//     for(auto it:v) if(!vis[it]) dfsr(it,ID++);
+// }
+
+// int dfs(int nd){
+//     vis[nd] = 1;
+//     int res = big[c[nd]] == 1;
+//     for(auto it:g[nd]) if(!vis[it]) res &= dfs(it);
+//     for(auto it:gr[nd]) if(!vis[it]) res &= dfs(it);
+//     return res;
+// }
+
+// signed main(){
+// #ifdef parad0x
+//     freopen("file.in","r",stdin);
+// #endif
+//     #define print(...) 42
+
+//     ios::sync_with_stdio(false);cin.tie(nullptr);
+//     cin >> n >> m;
+//     for(int i = 1,a,b;i<=m;++i){
+//         cin >> a >> b;
+//         add(a,b);
+//     }
+//     scc();
+//     fill(vis + 1,vis + 1 + n,0);
+//     int ans = n;
+//     for(int i = 1;i<=n;++i) if(!vis[i]) ans -= dfs(i);
+//     cout << ans << endl;
+//     return 0;
+// }
+
+
+
 /******************************************************************************
 
                               بسم الله الرحمان الرحيم
